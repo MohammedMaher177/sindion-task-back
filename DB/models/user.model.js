@@ -20,7 +20,6 @@ const UserSchema = new Schema(
 // });
 
 UserSchema.pre(["save", /update/gim, /^create/], async function () {
-  console.log(this._update);
   const defaultRound = parseInt(process.env.SALT_ROUNDS);
   if (this.password && bcryptjs.getRounds(this.password) != defaultRound) {
     this.password = bcryptjs.hashSync(
