@@ -1,5 +1,7 @@
 import joi from "joi";
-
+const getCharacterValidationError = (str) => {
+  return `It must contain at least 1 ${str} character`;
+};
 export const signupValidation = {
   body: joi
     .object({
@@ -10,15 +12,13 @@ export const signupValidation = {
       email: joi.string().email().required(),
       password: joi
         .string()
+        .min(8)
+        .pattern(new RegExp(/[0-9]/), getCharacterValidationError("digit"))
+        .pattern(new RegExp(/[A-Z]/), getCharacterValidationError("uppercase"))
+        .pattern(new RegExp(/[a-z]/), getCharacterValidationError("lowercase"))
         .pattern(
-          new RegExp(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>])[A-Za-z\d!@#$%^&*()\-_=+{};:,<.>]{9,}$/
-          ),
-          `It must contain at least one uppercase letter.
-            It must contain at least one lowercase letter.
-            It must contain at least one digit.
-            It must contain at least one special character.
-            It must be at least 9 characters long.`
+          new RegExp(/[!@#$%^&*()\-_=+{};:,<.>]/),
+          getCharacterValidationError("special characters")
         )
         .required(),
       rePassword: joi.string().valid(joi.ref("password")).required(),
@@ -28,19 +28,16 @@ export const signupValidation = {
 export const signInValidation = {
   body: joi
     .object({
-
       email: joi.string().email().required(),
       password: joi
         .string()
+        .min(8)
+        .pattern(new RegExp(/[0-9]/), getCharacterValidationError("digit"))
+        .pattern(new RegExp(/[A-Z]/), getCharacterValidationError("uppercase"))
+        .pattern(new RegExp(/[a-z]/), getCharacterValidationError("lowercase"))
         .pattern(
-          new RegExp(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>])[A-Za-z\d!@#$%^&*()\-_=+{};:,<.>]{9,}$/
-          ),
-          `It must contain at least one uppercase letter.
-            It must contain at least one lowercase letter.
-            It must contain at least one digit.
-            It must contain at least one special character.
-            It must be at least 9 characters long.`
+          new RegExp(/[!@#$%^&*()\-_=+{};:,<.>]/),
+          getCharacterValidationError("special characters")
         )
         .required(),
     })
@@ -52,22 +49,20 @@ export const updateValidation = {
     .object({
       name: joi
         .string()
-        .pattern(new RegExp(/^[a-zA-Z]{3,8}([_ -]?[a-zA-Z0-9]{3,8})*$/))
-        ,
+        .pattern(new RegExp(/^[a-zA-Z]{3,8}([_ -]?[a-zA-Z0-9]{3,8})*$/)),
       email: joi.string().email(),
       password: joi
         .string()
+        // 'Password should be of minimum 8 characters length'
+        .min(8)
+        .pattern(new RegExp(/[0-9]/), getCharacterValidationError("digit"))
+        .pattern(new RegExp(/[A-Z]/), getCharacterValidationError("uppercase"))
+        .pattern(new RegExp(/[a-z]/), getCharacterValidationError("lowercase"))
         .pattern(
-          new RegExp(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>])[A-Za-z\d!@#$%^&*()\-_=+{};:,<.>]{9,}$/
-          ),
-          `It must contain at least one uppercase letter.
-            It must contain at least one lowercase letter.
-            It must contain at least one digit.
-            It must contain at least one special character.
-            It must be at least 9 characters long.`
+          new RegExp(/[!@#$%^&*()\-_=+{};:,<.>]/),
+          getCharacterValidationError("special characters")
         )
-        ,
+        .required(),
       rePassword: joi.string().valid(joi.ref("password")),
     })
     .required(),
