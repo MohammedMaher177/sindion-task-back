@@ -3,6 +3,7 @@ import { AppError } from "../../../util/Error/AppError.js";
 import { catchError } from "../../../util/Error/catchError.js";
 
 export const getAllTasks = catchError(async (req, res) => {
+  // console.log(req.user);
   const result = await TaskModel.find({ user: req.user._id });
   res.json({ message: "success", result });
 });
@@ -32,16 +33,16 @@ export const deleteTask = catchError(async (req, res) => {
 
 export const updateTask = catchError(async (req, res) => {
   const { title, description } = req.body;
-  const task = await TaskModel.findOne({
+  const result = await TaskModel.findOne({
     _id: req.params.id,
     user: req.user._id,
   });
-  if (!task) throw new AppError("Task not found", 404);
+  if (!result) throw new AppError("Task not found", 404);
 
-  if (title) task.title = title;
-  if (description) task.description = description;
+  if (title) result.title = title;
+  if (description) result.description = description;
 
-  await task.save();
+  await result.save();
 
-  res.json({ message: "success", task });
+  res.json({ message: "success", result });
 });

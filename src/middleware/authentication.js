@@ -5,6 +5,7 @@ import UserModel from "../../DB/models/user.model.js";
 
 export const authMiddleware = catchError(async (req, res, next) => {
   const { authorization } = req.headers;
+  console.log(req.headers);
   if (!authorization) {
     return next(new AppError("authorization is required", 403));
   }

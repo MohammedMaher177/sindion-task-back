@@ -10,11 +10,12 @@ export const getAllUsers = catchError(async (req, res) => {
 });
 
 export const deleteUser = catchError(async (req, res) => {
-    const result = await UserModel.findByIdAndDelete(req.params.id);
-    res.json(result);
-})
+  const result = await UserModel.findByIdAndDelete(req.params.id);
+  res.json(result);
+});
 
 export const signup = catchError(async (req, res, next) => {
+  console.log(req.body);
   const existUser = await UserModel.findOne({ email: req.body.email });
   if (existUser) {
     return next(new AppError("Email Already Exist PLease Login", 403));
@@ -37,7 +38,7 @@ export const sign_in = catchError(async (req, res, next) => {
   const { email, password } = req.body;
   const result = await UserModel.findOne({ email });
   if (!result) {
-    return next(new AppError("Email Nor Register, please register as first"));
+    return next(new AppError("Email Not Register, please register at first", 404));
   }
   const match = bcrypt.compareSync(password, result.password);
   if (!match) {

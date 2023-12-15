@@ -3,9 +3,14 @@ import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 import { bootstrap } from "./src/app.routes.js";
-
+import cors from "cors";
 const app = express();
-const port = 8080;
+app.use(
+  cors({
+    origin: "*",
+  })
+);
+const port = 3001;
 
 app.use(express.json());
 
