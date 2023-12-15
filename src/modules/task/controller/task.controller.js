@@ -19,6 +19,7 @@ export const getSpeTask = catchError(async (req, res) => {
 export const createTask = catchError(async (req, res) => {
   req.body.user = req.user._id;
   const task = await TaskModel.create(req.body);
+  await task.populate("user")
   res.status(201).json({ message: "success", task });
 });
 
